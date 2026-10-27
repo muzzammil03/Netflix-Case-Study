@@ -1,145 +1,90 @@
-# 🎬 Netflix Case Study: Exploratory Data Analysis
+# Netflix Content Analysis (Case Study)
 
-An exploratory data analysis (EDA) of Netflix's catalogue of Movies and TV Shows. The goal is to find patterns in the content library and turn them into business insights: **what type of content to produce and how Netflix can grow in different countries.**
+Exploratory data analysis of the Netflix titles dataset to understand what kind of content Netflix hosts, where it comes from, and when it is added to the platform.
 
-![Python](https://img.shields.io/badge/Python-3.9%2B-blue?logo=python&logoColor=white)
-![Pandas](https://img.shields.io/badge/Pandas-Data%20Analysis-150458?logo=pandas&logoColor=white)
-![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-F37626?logo=jupyter&logoColor=white)
+## Objective
 
----
+Answer practical business questions about Netflix's catalog:
 
-## 📌 Problem Statement
+- Which countries produce the most Movies and TV Shows?
+- Which month / week is the best time to release a Movie or TV Show?
+- Which genres are produced the most?
+- Which directors appear most often?
+- How long after release does a movie get added to Netflix?
 
-Netflix is one of the world's leading streaming platforms with thousands of Movies and TV Shows. Using the catalogue data, this case study answers questions such as:
+## Dataset
 
-- What is the split between Movies and TV Shows?
-- Which countries produce the most content?
-- Which genres are the most popular?
-- Which directors and actors appear most often?
-- How has content production changed over the years?
-- When is the best time to launch new content?
-- What kind of content should Netflix focus on in each market?
+- File: `netflix_titles.csv`
+- Size: 8,807 titles, 12 columns
+- Columns: `show_id`, `type`, `title`, `director`, `cast`, `country`, `date_added`, `release_year`, `rating`, `duration`, `listed_in`, `description`
 
----
+## Tech Stack
 
-## 🗂️ Dataset
+- Python
+- Pandas, NumPy
+- Matplotlib, Seaborn
+- Jupyter Notebook
 
-The data is in `netflix_titles.csv`.
+## Data Preparation
 
-| Column | Description |
-|---|---|
-| `show_id` | Unique ID of each title |
-| `type` | Movie or TV Show |
-| `title` | Title of the content |
-| `director` | Director(s) of the content |
-| `cast` | Actors involved |
-| `country` | Country or countries where it was produced |
-| `date_added` | Date it was added to Netflix |
-| `release_year` | Original release year |
-| `rating` | Content rating (TV-MA, PG-13, etc.) |
-| `duration` | Duration in minutes (Movies) or number of seasons (TV Shows) |
-| `listed_in` | Genre(s) / category |
-| `description` | Short summary of the content |
+- Dropped rows with a missing title and reset the index.
+- Wrote a helper (`splitNested`) to split comma-separated columns (`director`, `country`, `listed_in`) into one value per row using `str.split`, `pd.melt`, and merged them back on `title`.
+- Converted `date_added` to datetime and engineered `year_added`, `month_added`, and `week_added`.
+- Used `nunique` on titles when counting, so titles with multiple countries/genres are not double counted.
 
----
+## Analysis and Key Findings
 
-## 🔬 Analysis Workflow
+| Question | Result |
+| --- | --- |
+| Top Movie-producing countries | United States (2058), India (893), United Kingdom (206), Canada (122), Spain (97) |
+| Top TV Show-producing countries | United States (760), United Kingdom (213), Japan (169), South Korea (158), India (79) |
+| Best month for Movies | July (565), April (550), December (547) |
+| Best month for TV Shows | July (254), December (250), September (246) |
+| Best weeks for TV Shows | Week 27 (85), Week 31 (79), Week 24 (75) |
+| Most produced genres | International Movies (2752), Dramas (2427), Comedies (1674) |
+| Most frequent director | Rajiv Chilaka (19 titles), followed by Raul Campos & Jan Suter (18) and Marcus Raboy / Suhas Kadav (16) |
+| Release to Netflix delay (movies, last 5 years of additions) | Median about 949 days (about 2.6 years) |
 
-1. **Data exploration**: shape, data types and basic statistics
-2. **Data cleaning**
-   - Missing value detection and treatment
-   - Converting `date_added` to datetime
-   - Un-nesting columns with multiple values (director, cast, country, genre)
-   - Removing duplicates
-3. **Univariate analysis**: Movies vs TV Shows, ratings, genres, countries
-4. **Bivariate analysis**: content type vs country, genre vs year, release trends
-5. **Insights and recommendations**: what to produce, where, and when
+Charts included: bar charts for countries and months, a bar chart of weekly additions, a pie chart of top genres, and a boxplot of days-to-Netflix.
 
----
-
-## 🛠️ Tech Stack
-
-| Category | Tools |
-|---|---|
-| Language | Python |
-| Data handling | Pandas, NumPy |
-| Visualisation | Matplotlib, Seaborn |
-| Environment | Jupyter Notebook |
-
----
-
-## 📁 Project Structure
+## Repository Structure
 
 ```
 Netflix-Case-Study/
-├── netflixCaseStudy.ipynb          # Main case study analysis
-├── NetflixIntroduction (1).ipynb   # Introductory notebook
-├── netflix_titles.csv              # Dataset
+├── netflixCaseStudy.ipynb       # Main analysis notebook
+├── NetflixIntroduction (1).ipynb
+├── netflix_titles.csv           # Dataset
 └── README.md
 ```
 
----
+## How to Run
 
-## ⚙️ Installation
+1. Clone the repository
+   ```bash
+   git clone https://github.com/muzzammil03/Netflix-Case-Study.git
+   cd Netflix-Case-Study
+   ```
+2. Install dependencies
+   ```bash
+   pip install numpy pandas matplotlib seaborn jupyter
+   ```
+3. Open the notebook
+   ```bash
+   jupyter notebook netflixCaseStudy.ipynb
+   ```
 
-**1. Clone the repository**
+## Notes and Limitations
 
-```bash
-git clone https://github.com/muzzammil03/Netflix-Case-Study.git
-cd Netflix-Case-Study
-```
+- The dataset only has `release_year`, not the exact release date, so the release-to-Netflix delay is approximated using January 1 of the release year. Treat it as a rough estimate.
+- "Best month/week to release" is based on when titles were added to Netflix, not on viewership or ratings.
 
-**2. Install dependencies**
+## Future Work
 
-```bash
-pip install pandas numpy matplotlib seaborn jupyter
-```
+- Build a content-based recommendation system using TF-IDF on `description`/`listed_in` and cosine similarity.
+- Add rating and duration analysis.
+- Build an interactive dashboard.
 
-**3. Launch the notebook**
+## Author
 
-```bash
-jupyter notebook netflixCaseStudy.ipynb
-```
-
-Run the cells from top to bottom. Make sure `netflix_titles.csv` is in the same folder as the notebook.
-
----
-
-## 💡 Key Insights
-
-> Add your own findings here after checking the notebook. Examples:
-
-- Movies vs TV Shows: which type dominates the catalogue
-- Top countries and genres by number of titles
-- Year-wise growth in content added
-- Best months or periods to release new content
-- Recommendations for different markets
-
----
-
-## 🔭 Future Improvements
-
-- Add an interactive dashboard (Streamlit or Power BI)
-- Build a content-based recommendation system using `description` and `listed_in`
-- Apply NLP on descriptions for topic analysis
-
----
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a new branch (`git checkout -b feature/your-feature`)
-3. Commit your changes (`git commit -m "Add your feature"`)
-4. Push the branch (`git push origin feature/your-feature`)
-5. Open a Pull Request
-
----
-
-## 👤 Author
-
-**Muzzammil**
-GitHub: [@muzzammil03](https://github.com/muzzammil03)
-
----
-
-⭐ If you found this project useful, please give it a star!
+Muzzammil
+[GitHub](https://github.com/muzzammil03)
